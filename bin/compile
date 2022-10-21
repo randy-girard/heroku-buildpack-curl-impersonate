@@ -9,7 +9,7 @@ echo "-----> Install curl-impersonate"
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-VENDOR_DIR="$BUILD_DIR/vendor"
+VENDOR_DIR="$CACHE_DIR/vendor"
 INSTALL_DIR="$VENDOR_DIR/curl-impersonate"
 CACHE_FILE="$CACHE_DIR/curl-impersonate.tar.gz"
 
