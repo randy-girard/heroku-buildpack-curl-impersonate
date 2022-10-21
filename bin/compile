@@ -39,7 +39,7 @@ if [ ! -f $CACHE_FILE ]; then
 
   # cache for future deploys
   echo "-----> Caching curl-impersonate installation"
-  cd $VENDOR_DIR
+  cd $BUILD_DIR
   REL_INSTALL_DIR="curl-impersonate"
   tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
   mv $REL_INSTALL_DIR.tar.gz $CACHE_FILE
