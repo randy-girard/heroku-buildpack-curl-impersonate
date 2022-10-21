@@ -55,5 +55,8 @@ echo "-----> Updating environment variables"
 PROFILE_PATH="$BUILD_DIR/.profile.d/curl-impersonate.sh"
 ACTUAL_INSTALL_PATH="$HOME/vendor/curl-impersonate"
 mkdir -p $(dirname $PROFILE_PATH)
-echo "export PATH=$ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
+echo "export PATH=$ACTUAL_INSTALL_PATH:$ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
 echo "export LD_LIBRARY_PATH=$ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
+
+env
+ls -al $ACTUAL_INSTALL_PATH/*
