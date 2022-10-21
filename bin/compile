@@ -28,8 +28,12 @@ if [ ! -f $CACHE_FILE ]; then
   cd $CURL_IMPERSONATE_DIR
   export CPPFLAGS="-I$INSTALL_DIR/include"
   export LDFLAGS="-L$INSTALL_DIR/lib"
-  ./configure --prefix=$INSTALL_DIR
-  make && make install
+  mkdir build && cd build
+  ../configure --prefix=$INSTALL_DIR
+  make firefox-build
+  make firefox-install
+  make chrome-build
+  make chrome-install
   cd ..
   rm -rf $CURL_IMPERSONATE_DIR
 
