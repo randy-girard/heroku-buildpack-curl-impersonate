@@ -7,6 +7,8 @@ indent() {
 echo "-----> Install curl-impersonate"
 
 BUILD_DIR=$1
+CACHE_DIR=$2
+
 VENDOR_DIR="$BUILD_DIR/vendor"
 INSTALL_DIR="$VENDOR_DIR/curl-impersonate"
 CACHE_FILE="$CACHE_DIR/curl-impersonate.tar.gz"
@@ -21,8 +23,6 @@ if [ ! -f $CACHE_FILE ]; then
   echo "-----> Downloading curl-impersonate from $CURL_IMPERSONATE_URL"
   curl -L --silent $CURL_IMPERSONATE_URL | tar xz
 
-  ls -al
-
   echo "-----> Building curl-impersonate"
   cd $CURL_IMPERSONATE_DIR
   export CPPFLAGS="-I$INSTALL_DIR/include"
@@ -30,8 +30,8 @@ if [ ! -f $CACHE_FILE ]; then
 
   mkdir build && cd build
   ../configure --prefix=$INSTALL_DIR
-  make firefox-build
-  make firefox-install
+  # make firefox-build
+  # make firefox-install
   make chrome-build
   make chrome-install
   cd ..
