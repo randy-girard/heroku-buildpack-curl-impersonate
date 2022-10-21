@@ -14,9 +14,9 @@ CACHE_FILE="$CACHE_DIR/curl-impersonate.tar.gz"
 
 if [ ! -f $CACHE_FILE ]; then
   # install curl-impersonate
-  CURL_IMPERSONATE_VERSION="v0.5.3"
-  CURL_IMPERSONATE_FILE="$CURL_IMPERSONATE_VERSION.tar.gz"
-  CURL_IMPERSONATE_DIR="$CURL_IMPERSONATE_VERSION"
+  CURL_IMPERSONATE_VERSION="0.5.3"
+  CURL_IMPERSONATE_FILE="v$CURL_IMPERSONATE_VERSION.tar.gz"
+  CURL_IMPERSONATE_DIR="curl-impersonate-$CURL_IMPERSONATE_VERSION"
   CURL_IMPERSONATE_URL="https://github.com/lwthiker/curl-impersonate/archive/refs/tags/$CURL_IMPERSONATE_FILE"
 
   echo "-----> Downloading curl-impersonate from $CURL_IMPERSONATE_URL"
