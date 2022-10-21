@@ -7,9 +7,9 @@ BUILD_PATH=$(cd "$1/" && pwd)
 CACHE_PATH=$(cd "$2/" && pwd)
 
 VERSION=0.5.3
-LIBCURL_IMPERSONATE_DIR=libcurl-impersonate-v$VERSION
-TARBALL=$LIBCURL_IMPERSONATE_DIR.x86_64-linux-gnu.tar.gz
-TARBALL_URL=https://github.com/lwthiker/curl-impersonate/releases/download/v0.5.3/libcurl-impersonate-v0.5.3.x86_64-linux-gnu.tar.gz
+LIBCURL_IMPERSONATE_DIR=libcurl-impersonate-v$VERSION.x86_64-linux-gnu
+TARBALL=$LIBCURL_IMPERSONATE_DIR.tar.gz
+TARBALL_URL=https://github.com/lwthiker/curl-impersonate/releases/download/v$VERSION/$TARBALL
 
 indent() {
   sed -u "s/^/       /"
