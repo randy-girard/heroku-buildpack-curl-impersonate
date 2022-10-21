@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -e
+
+mkdir -p "$1" "$2"
+BUILD_PATH=$(cd "$1/" && pwd)
+CACHE_PATH=$(cd "$2/" && pwd)
+
+VERSION=0.5.3
+LIBCURL_IMPERSONATE_DIR=libcurl-impersonate-v$VERSION
+TARBALL=$LIBCURL_IMPERSONATE_DIR.x86_64-linux-gnu.tar.gz
+TARBALL_URL=https://github.com/lwthiker/curl-impersonate/releases/download/v0.5.3/libcurl-impersonate-v0.5.3.x86_64-linux-gnu.tar.gz
+
+indent() {
+  sed -u "s/^/       /"
+}
+
+if [ ! -d $CACHE_PATH/$LIBCURL_IMPERSONATE_DIR ];
+then
+  cd $CACHE_PATH
+
+  echo -n "-----> Fetching libcurl-impersonate... "
+  curl --silent --remote-name --insecure --location $TARBALL_URL
+  tar -xf $TARBALL
+  rm $TARBALL
+  echo "done"
+fi
+
+echo -n "-----> Copying libcurl-impersonate ($VERSION)... "
+mkdir -p $BUILD_PATH/vendor
+cp -r $CACHE_PATH/$LIBCURL_IMPERSONATE_DIR $BUILD_PATH/vendor/$LIBCURL_IMPERSONATE_DIR
+echo "done"
