@@ -22,6 +22,8 @@ if [ ! -f $CACHE_FILE ]; then
   echo "-----> Downloading curl-impersonate from $CURL_IMPERSONATE_URL"
   curl -L --silent $CURL_IMPERSONATE_URL | tar xz
 
+  ls -al
+
   echo "-----> Building curl-impersonate"
   cd $CURL_IMPERSONATE_DIR
   export CPPFLAGS="-I$INSTALL_DIR/include"
