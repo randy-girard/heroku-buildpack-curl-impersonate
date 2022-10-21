@@ -1,32 +1,53 @@
-#!/usr/bin/env bash
-
-set -e
-
-mkdir -p "$1" "$2"
-BUILD_PATH=$(cd "$1/" && pwd)
-CACHE_PATH=$(cd "$2/" && pwd)
-
-VERSION=0.5.3
-LIBCURL_IMPERSONATE_DIR=libcurl-impersonate-v$VERSION.x86_64-linux-gnu
-TARBALL=$LIBCURL_IMPERSONATE_DIR.tar.gz
-TARBALL_URL=https://github.com/lwthiker/curl-impersonate/releases/download/v$VERSION/$TARBALL
+#!/bin/bash
 
 indent() {
-  sed -u "s/^/       /"
+  sed -u 's/^/       /'
 }
 
-if [ ! -d $CACHE_PATH/$LIBCURL_IMPERSONATE_DIR ];
-then
-  cd $CACHE_PATH
+echo "-----> Install curl-impersonate"
 
-  echo -n "-----> Fetching libcurl-impersonate... "
-  curl --silent --remote-name --insecure --location $TARBALL_URL
-  tar -xf $TARBALL
-  rm $TARBALL
-  echo "done"
+BUILD_DIR=$1
+VENDOR_DIR="$BUILD_DIR/vendor"
+INSTALL_DIR="$VENDOR_DIR/curl-impersonate"
+CACHE_FILE="$CACHE_DIR/curl-impersonate.tar.gz"
+
+
+if [ ! -f $CACHE_FILE ]; then
+  # install curl-impersonate
+  CURL_IMPERSONATE_VERSION="v0.5.3"
+  CURL_IMPERSONATE_FILE="curl-impersonate-$CURL_IMPERSONATE_VERSION.x86_64-linux-gnu.tar.gz"
+  CURL_IMPERSONATE_DIR="curl-impersonate-$CURL_IMPERSONATE_VERSION"
+  CURL_IMPERSONATE_URL="https://github.com/lwthiker/curl-impersonate/releases/download/$CURL_IMPERSONATE_VERSION/$CURL_IMPERSONATE_FILE"
+
+  echo "-----> Downloading curl-impersonate from $CURL_IMPERSONATE_URL"
+  curl -L --silent $CURL_IMPERSONATE_URL | tar xz
+
+  echo "-----> Building curl-impersonate"
+  cd $CURL_IMPERSONATE_DIR
+  export CPPFLAGS="-I$INSTALL_DIR/include"
+  export LDFLAGS="-L$INSTALL_DIR/lib"
+  ./configure --prefix=$INSTALL_DIR
+  make && make install
+  cd ..
+  rm -rf $CURL_IMPERSONATE_DIR
+
+  # cache for future deploys
+  echo "-----> Caching curl-impersonate installation"
+  cd $VENDOR_DIR
+  REL_INSTALL_DIR="curl-impersonate"
+  tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
+  mv $REL_INSTALL_DIR.tar.gz $CACHE_FILE
+
+else
+  # cache exists, extract it
+  echo "-----> Extracting curl-impersonate $CACHE_FILE => $VENDOR_DIR"
+  tar xzf $CACHE_FILE -C $VENDOR_DIR
 fi
 
-echo -n "-----> Copying libcurl-impersonate ($VERSION)... "
-mkdir -p $BUILD_PATH/vendor
-cp -r $CACHE_PATH/$LIBCURL_IMPERSONATE_DIR $BUILD_PATH/vendor/$LIBCURL_IMPERSONATE_DIR
-echo "done"
+# update PATH and LD_LIBRARY_PATH
+echo "-----> Updating environment variables"
+PROFILE_PATH="$BUILD_DIR/.profile.d/curl-impersonate.sh"
+ACTUAL_INSTALL_PATH="$HOME/vendor/curl-impersonate"
+mkdir -p $(dirname $PROFILE_PATH)
+echo "export PATH=$ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
+echo "export LD_LIBRARY_PATH=$ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH

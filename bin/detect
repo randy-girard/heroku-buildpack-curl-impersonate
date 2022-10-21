@@ -1,4 +1,5 @@
 #!/bin/sh
 
 # this pack is valid for all apps
+echo "curl-impersonate-chrome-config"
 exit 0
