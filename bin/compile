@@ -9,54 +9,19 @@ echo "-----> Install curl-impersonate"
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-VENDOR_DIR="$BUILD_DIR/vendor"
-INSTALL_DIR="$VENDOR_DIR/curl-impersonate"
-CACHE_FILE="$CACHE_DIR/curl-impersonate.tar.gz"
+INSTALL_DIR="$CACHE_DIR/vendor/curl-impersonate"
+CURL_IMPERSONATE_URL="https://github.com/randy-girard/heroku-buildpack-curl-impersonate/raw/master/curl-impersonate.tar.gz"
 
-if [ ! -f $CACHE_FILE ]; then
-  # install curl-impersonate
-  CURL_IMPERSONATE_VERSION="0.5.3"
-  CURL_IMPERSONATE_FILE="v$CURL_IMPERSONATE_VERSION.tar.gz"
-  CURL_IMPERSONATE_DIR="curl-impersonate-$CURL_IMPERSONATE_VERSION"
-  CURL_IMPERSONATE_URL="https://github.com/lwthiker/curl-impersonate/archive/refs/tags/$CURL_IMPERSONATE_FILE"
-
-  echo "-----> Downloading curl-impersonate from $CURL_IMPERSONATE_URL"
-  curl -L --silent $CURL_IMPERSONATE_URL | tar xz
-
-  echo "-----> Building curl-impersonate"
-  cd $CURL_IMPERSONATE_DIR
-  export CPPFLAGS="-I$INSTALL_DIR/include"
-  export LDFLAGS="-L$INSTALL_DIR/lib"
-
-  mkdir build && cd build
-  ../configure --prefix=$INSTALL_DIR
-  # make firefox-build
-  # make firefox-install
-  make chrome-build
-  make chrome-install
-  cd ..
-  rm -rf $CURL_IMPERSONATE_DIR
-
-  # cache for future deploys
-  echo "-----> Caching curl-impersonate installation"
-  cd $BUILD_DIR
-  REL_INSTALL_DIR="curl-impersonate"
-  tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
-  mv $REL_INSTALL_DIR.tar.gz $CACHE_FILE
-
-  echo "export PATH=$ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
-  echo "export LD_LIBRARY_PATH=$ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
-else
-  # cache exists, extract it
-  echo "-----> Extracting curl-impersonate $CACHE_FILE => $VENDOR_DIR"
-  mkdir -p $VENDOR_DIR
-  tar xzf $CACHE_FILE -C $VENDOR_DIR
-fi
+echo "-----> Downloading curl-impersonate from $CURL_IMPERSONATE_URL"
+curl -L --silent $CURL_IMPERSONATE_URL | tar xz -C $INSTALL_DIR
 
 # update PATH and LD_LIBRARY_PATH
 echo "-----> Updating environment variables"
 PROFILE_PATH="$BUILD_DIR/.profile.d/curl-impersonate.sh"
-ACTUAL_INSTALL_PATH="$HOME/vendor/curl-impersonate"
+
+ls -al
+ls -al $INSTALL_DIR
+
 mkdir -p $(dirname $PROFILE_PATH)
-echo "export PATH=$ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
-echo "export LD_LIBRARY_PATH=$ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
+echo "export PATH=$INSTALL_DIR/bin:\$PATH" >> $PROFILE_PATH
+echo "export LD_LIBRARY_PATH=$INSTALL_DIR/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
