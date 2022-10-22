@@ -12,6 +12,8 @@ CACHE_DIR=$2
 INSTALL_DIR="$CACHE_DIR/vendor/curl-impersonate"
 CURL_IMPERSONATE_URL="https://github.com/randy-girard/heroku-buildpack-curl-impersonate/raw/master/curl-impersonate.tar.gz"
 
+mkdir -p $INSTALL_DIR
+
 echo "-----> Downloading curl-impersonate from $CURL_IMPERSONATE_URL"
 curl -L --silent $CURL_IMPERSONATE_URL | tar xz -C $INSTALL_DIR
 
