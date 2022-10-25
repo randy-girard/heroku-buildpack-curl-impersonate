@@ -21,9 +21,6 @@ curl -L --silent $CURL_IMPERSONATE_URL | tar xz -C $INSTALL_DIR
 echo "-----> Updating environment variables"
 PROFILE_PATH="$BUILD_DIR/.profile.d/curl-impersonate.sh"
 
-ls -al
-ls -al $INSTALL_DIR
-
 mkdir -p $(dirname $PROFILE_PATH)
 echo "export PATH=/app/vendor/curl-impersonate/curl-impersonate-install/bin:$INSTALL_DIR/bin:\$PATH" >> $PROFILE_PATH
 echo "export LD_LIBRARY_PATH=/app/vendor/curl-impersonate/curl-impersonate-install/lib:$INSTALL_DIR/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
