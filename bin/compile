@@ -10,7 +10,7 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 
 INSTALL_DIR="$CACHE_DIR/vendor/curl-impersonate"
-CURL_IMPERSONATE_URL="https://github.com/randy-girard/heroku-buildpack-curl-impersonate/raw/master/curl-impersonate.tar.gz"
+CURL_IMPERSONATE_URL="https://github.com/randy-girard/heroku-buildpack-curl-impersonate/releases/download/1.0.0/curl-impersonate.tar.gz"
 
 mkdir -p $INSTALL_DIR
 
